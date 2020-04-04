@@ -8,13 +8,171 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
+    @IBOutlet weak var picture: UIImageView!
+    @IBOutlet weak var topText: UITextField!
+    @IBOutlet weak var bottomText: UITextField!
+    
+    @IBOutlet weak var toolbar: UIToolbar!
+    @IBOutlet weak var cameraButton: UIBarButtonItem!
+    
+    @IBOutlet weak var shareButton: UIBarButtonItem!
+    
+    let topLineLabel = "TOP LINE"
+    let bottomLineLabel = "BOTTOM LINE"
+    
+    let memeTextAttributes: [NSAttributedString.Key: Any] = [
+        NSAttributedString.Key.strokeColor: UIColor.black,
+        NSAttributedString.Key.foregroundColor: UIColor.white,
+        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+        NSAttributedString.Key.strokeWidth:  -2.0,
+    ]
+    
+    override func viewWillAppear(_ animated: Bool) {
+
+        super.viewWillAppear(animated)
+        subscribeToKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+
+        super.viewWillDisappear(animated)
+        unsubscribeFromKeyboardNotifications()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+        
+        topText.defaultTextAttributes = memeTextAttributes
+        bottomText.defaultTextAttributes = memeTextAttributes
+       
+        topText.textAlignment = NSTextAlignment.center
+        bottomText.textAlignment = NSTextAlignment.center
+        
+        topText.delegate = self
+        bottomText.delegate = self
+        
+        clear()
     }
 
+    @IBAction func pickImageTapped(_ sender: Any) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    @IBAction func takeImageTapped(_ sender: Any) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .camera
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        dismiss(animated: true, completion: nil)
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            picture.image = image
+            shareButton.isEnabled = true
+        }
+    }
+    
+    @IBAction func cancelTapped(_ sender: Any) {
+        clear()
+    }
+    
+    func generateMemedImage() -> UIImage {
+        toolbar.isHidden = true
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
 
+        // Render view to an image
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
+        let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        toolbar.isHidden = false
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+
+        return memedImage
+    }
+    
+    
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func shareButtonTapped(_ sender: Any) {
+        let image = generateMemedImage()
+        let shareActivity = UIActivityViewController.init(activityItems: [image], applicationActivities: nil)
+        shareActivity.completionWithItemsHandler = { activity, success, items, error in
+            if (success) { // user successfully shared image, not clicked cancel
+                self.clear()
+            }
+        }
+         present(shareActivity, animated: true, completion: nil)
+    }
+    
+    func clear() {
+        topText.text = topLineLabel
+        bottomText.text = bottomLineLabel
+        picture.image = nil
+        shareButton.isEnabled = false
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if (textField.tag == 0 && textField.text == topLineLabel) {
+            textField.text = ""
+        }
+        
+        if (textField.tag == 1 && textField.text == bottomLineLabel) {
+            textField.text = ""
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        textField.text = "\(textField.text! as NSString)\(string.uppercased())"
+        return false
+    }
+
+    
+    func subscribeToKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    func unsubscribeFromKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ notification:Notification) {
+        if (bottomText.isFirstResponder) {
+            view.frame.origin.y -= getKeyboardHeight(notification)
+        }
+    }
+    
+    @objc func keyboardWillHide(_ notification:Notification) {
+        if (bottomText.isFirstResponder) {
+            view.frame.origin.y += getKeyboardHeight(notification)
+        }
+    }
+
+    func getKeyboardHeight(_ notification:Notification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        return keyboardSize.cgRectValue.height
+    }
+    
 }
 

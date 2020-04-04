@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE1DB32A24389E5800D1EA20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1DB32924389E5800D1EA20 /* SceneDelegate.swift */; };
 		EE9ED4B0243668E500423207 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9ED4AF243668E500423207 /* AppDelegate.swift */; };
-		EE9ED4B2243668E500423207 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9ED4B1243668E500423207 /* SceneDelegate.swift */; };
 		EE9ED4B4243668E500423207 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9ED4B3243668E500423207 /* ViewController.swift */; };
 		EE9ED4B7243668E500423207 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE9ED4B5243668E500423207 /* Main.storyboard */; };
 		EE9ED4B9243668E500423207 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE9ED4B8243668E500423207 /* Assets.xcassets */; };
@@ -16,9 +16,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EE1DB32924389E5800D1EA20 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		EE9ED4AC243668E500423207 /* MemeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE9ED4AF243668E500423207 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EE9ED4B1243668E500423207 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		EE9ED4B3243668E500423207 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		EE9ED4B6243668E500423207 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EE9ED4B8243668E500423207 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -56,8 +56,8 @@
 		EE9ED4AE243668E500423207 /* MemeApp */ = {
 			isa = PBXGroup;
 			children = (
+				EE1DB32924389E5800D1EA20 /* SceneDelegate.swift */,
 				EE9ED4AF243668E500423207 /* AppDelegate.swift */,
-				EE9ED4B1243668E500423207 /* SceneDelegate.swift */,
 				EE9ED4B3243668E500423207 /* ViewController.swift */,
 				EE9ED4B5243668E500423207 /* Main.storyboard */,
 				EE9ED4B8243668E500423207 /* Assets.xcassets */,
@@ -140,7 +140,7 @@
 			files = (
 				EE9ED4B4243668E500423207 /* ViewController.swift in Sources */,
 				EE9ED4B0243668E500423207 /* AppDelegate.swift in Sources */,
-				EE9ED4B2243668E500423207 /* SceneDelegate.swift in Sources */,
+				EE1DB32A24389E5800D1EA20 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +287,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7GMR8U5Z57;
 				INFOPLIST_FILE = MemeApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -305,6 +306,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7GMR8U5Z57;
 				INFOPLIST_FILE = MemeApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

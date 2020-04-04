@@ -1,8 +1,8 @@
 //
 //  SceneDelegate.swift
-//  MemeApp
+//  PitchApp
 //
-//  Created by Artem Osipov on 02/04/2020.
+//  Created by Artem Osipov on 29/03/2020.
 //  Copyright © 2020 Artem Osipov. All rights reserved.
 //
 
