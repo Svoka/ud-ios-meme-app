@@ -114,7 +114,9 @@ class EditMemeViewController: UIViewController, UIImagePickerControllerDelegate,
                 self.clear()
             }
         }
-         present(shareActivity, animated: true, completion: nil)
+        
+        let meme = Meme(topText: topText.text!, bottomText: bottomText.text!, originalImage: picture.image!, memedImage: image)
+        present(shareActivity, animated: true, completion: nil)
     }
     
     func clear() {
