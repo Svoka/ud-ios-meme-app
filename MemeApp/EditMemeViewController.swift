@@ -29,14 +29,18 @@ class EditMemeViewController: UIViewController, UIImagePickerControllerDelegate,
         NSAttributedString.Key.strokeWidth:  -2.0,
     ]
     
+
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         subscribeToKeyboardNotifications()
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         unsubscribeFromKeyboardNotifications()
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidLoad() {
@@ -81,7 +85,7 @@ class EditMemeViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func cancelTapped(_ sender: Any) {
-        clear()
+        self.navigationController?.popViewController(animated: true)
     }
     
     func generateMemedImage() -> UIImage {
@@ -110,12 +114,17 @@ class EditMemeViewController: UIViewController, UIImagePickerControllerDelegate,
         let image = generateMemedImage()
         let shareActivity = UIActivityViewController.init(activityItems: [image], applicationActivities: nil)
         shareActivity.completionWithItemsHandler = { activity, success, items, error in
-            if (success) { // user successfully shared image, not clicked cancel
-                self.clear()
+            if (success) {
+                
+                let meme = Meme(topText: self.topText.text!, bottomText: self.bottomText.text!, originalImage: self.picture.image!, memedImage: image)
+                let object = UIApplication.shared.delegate
+                let appDelegate = object as! AppDelegate
+                appDelegate.memes.append(meme)
+                
+                self.navigationController?.popViewController(animated: true)
             }
         }
         
-        let meme = Meme(topText: topText.text!, bottomText: bottomText.text!, originalImage: picture.image!, memedImage: image)
         present(shareActivity, animated: true, completion: nil)
     }
     
