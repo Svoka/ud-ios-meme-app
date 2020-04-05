@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class EditMemeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var picture: UIImageView!
     @IBOutlet weak var topText: UITextField!
@@ -30,48 +30,47 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     ]
     
     override func viewWillAppear(_ animated: Bool) {
-
         super.viewWillAppear(animated)
         subscribeToKeyboardNotifications()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-
         super.viewWillDisappear(animated)
         unsubscribeFromKeyboardNotifications()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         
-        topText.defaultTextAttributes = memeTextAttributes
-        bottomText.defaultTextAttributes = memeTextAttributes
-       
-        topText.textAlignment = NSTextAlignment.center
-        bottomText.textAlignment = NSTextAlignment.center
-        
-        topText.delegate = self
-        bottomText.delegate = self
+        prepareTextView(textField: topText, defaultText: topLineLabel)
+        prepareTextView(textField: bottomText, defaultText: bottomLineLabel)
         
         clear()
     }
+    
+    func prepareTextView(textField: UITextField, defaultText: String) {
+        textField.defaultTextAttributes = memeTextAttributes
+        textField.textAlignment = NSTextAlignment.center
+        textField.delegate = self
+        textField.text = defaultText
+    }
 
     @IBAction func pickImageTapped(_ sender: Any) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
+        pickImage(with: .photoLibrary)
     }
     
     @IBAction func takeImageTapped(_ sender: Any) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .camera
-        present(imagePicker, animated: true, completion: nil)
+        pickImage(with: .camera)
     }
     
+    
+    func pickImage(with sourceType: UIImagePickerController.SourceType) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = sourceType
+        present(imagePicker, animated: true, completion: nil)
+    }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         dismiss(animated: true, completion: nil)
@@ -164,7 +163,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @objc func keyboardWillHide(_ notification:Notification) {
         if (bottomText.isFirstResponder) {
-            view.frame.origin.y += getKeyboardHeight(notification)
+            view.frame.origin.y = 0
         }
     }
 
